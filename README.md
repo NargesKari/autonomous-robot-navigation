@@ -145,7 +145,6 @@ To validate the path planning without a full navigation executive, we perform a 
 2. **Goal Selection:** A destination is sent to the `/plan_path` service.
 3. **Visualization:** The computed path is immediately published to the `/global_path` topic and visualized in RViz as a continuous line.
 
----
 
 ## 🛠️ Verification and Results
 
@@ -237,18 +236,21 @@ ros2 launch robot_description mpc_controller.launch.py
 
 ### 📽️ Performance Demonstrations
 
-<table style="width:100%">
+<table>
   <tr>
     <th>PID Controller (Reactive)</th>
     <th>MPC Controller (Predictive)</th>
   </tr>
   <tr>
-    <td>
-      <video src="media/pid.mp4" width="400" muted autoplay loop></video>
+    <td align="center">
+      <img src="media/pid.gif" width="400"/><br/>
+      <a href="media/pid.mp4">▶ Watch video</a>
     </td>
-    <td>
-      <video src="media/mpc.mp4" width="400" muted autoplay loop></video>
+    <td align="center">
+      <img src="media/mpc.gif" width="400"/><br/>
+      <a href="media/mpc.mp4">▶ Watch video</a>
     </td>
   </tr>
 </table>
+
 ---
