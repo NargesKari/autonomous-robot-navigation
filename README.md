@@ -159,6 +159,78 @@ The demonstration confirms the following:
 ![A* Path](media/astar.png)
 
 ---
+بله حتماً! برای **Task 3 (Reinforcement Learning)**، چون هنوز عکسی نداری، ریدمی را طوری طراحی می‌کنم که ساختار علمی و فنی کاملی داشته باشد (مطابق با خواسته‌های استاد در صورت پروژه) و هر جا که لازم بود عکس یا ویدیو اضافه کنی، برایت جای خالی (Placeholder) می‌گذارم.
+
+این محتوا را به انتهای فایل README خودت اضافه کن:
+
+---
+
+# 🧠 Task 3: Reinforcement Learning (RL) for Line Following
+
+## 📖 Theory & Objective
+
+The objective of this task is to design, train, and integrate a **Reinforcement Learning (RL)** agent to perform line-following behavior. Unlike classical controllers (PID/MPC) that follow explicit rules, the RL agent learns an optimal policy by interacting with the environment and maximizing a cumulative reward signal.
+
+### 🏗️ RL Formulation
+
+To implement the RL problem, we defined the following components:
+
+* **State Space (Observations):** The agent observes a 4-dimensional vector:
+1. **Distance to Goal:** Euclidean distance from the robot to .
+2. **Heading Error:** Angular difference between the robot's orientation and the goal direction.
+3. **Minimum Laser Scan:** The closest obstacle distance for collision avoidance.
+4. **Current Velocity:** The robot's existing linear speed.
+
+
+* **Action Space:** A continuous 2D vector representing  (Linear and Angular velocity).
+* **Algorithm:** We implemented a **Deep Deterministic Policy Gradient (DDPG)** algorithm from scratch using PyTorch, without utilizing high-level libraries like `stable-baselines`.
+
+### 💎 Reward Function Design
+
+The reward function is the core of the learning process. We designed it to encourage efficiency while penalizing dangerous behavior:
+
+* **Goal Reward:** A large positive reward () when the robot reaches within  of the target.
+* **Collision Penalty:** A heavy negative penalty () if the laser detects an obstacle within .
+* **Alignment Reward:** A continuous reward based on the cosine of the heading error to keep the robot facing the path.
+* **Progress Reward:** Positive reinforcement for reducing the distance to the goal.
+
+
+
+## ⚙️ Technical Implementation
+
+### 🛠️ Software Architecture
+
+The implementation is split into three main components:
+
+1. **`models.py`**: Contains the Actor and Critic neural networks along with the Replay Buffer.
+2. **`robot_env.py`**: A custom ROS 2 wrapper that handles Gazebo resets, sensor data processing, and reward calculation.
+3. **`train_node.py`**: The main execution loop that manages the training episodes and model saving.
+
+| Component | Detail | Description |
+| --- | --- | --- |
+| **Framework** | **PyTorch** | Neural network backend |
+| **RL Algorithm** | **DDPG** | Actor-Critic for continuous control |
+| **Communication** | **ROS 2 Humble** | Handles Odom, LaserScan, and Cmd_Vel |
+| **Simulation** | **Ignition Gazebo** | Physics environment for training |
+
+
+## 🚀 Execution Workflow
+
+### 1. Training Phase
+
+To train the agent, the environment must be running in Gazebo while the training node iterates through episodes:
+
+```bash
+ros2 run robot_description train_node.py
+
+```
+
+### 2. Inference (Deployment) Phase
+
+Once trained, the weights are saved as `actor_model_final.pth`. The robot can then navigate using the learned policy without further updates.
+
+
+---
 
 # 🏆 Bonus Task: Classical Control for Path Following (PID & MPC)
 
