@@ -1,0 +1,20 @@
+digraph G {
+"map" -> "odom"[label=" Broadcaster: default_authority\nAverage rate: 20.526\nBuffer length: 1.9\nMost recent transform: 1122.1\nOldest transform: 1120.2\n"];
+"base_link" -> "caster_back_left_link"[label=" Broadcaster: default_authority\nAverage rate: 19.851\nBuffer length: 1.612\nMost recent transform: 1121.068\nOldest transform: 1119.456\n"];
+"odom" -> "base_link"[label=" Broadcaster: default_authority\nAverage rate: 251.948\nBuffer length: 1.54\nMost recent transform: 1121.1\nOldest transform: 1119.56\n"];
+"base_link" -> "caster_back_right_link"[label=" Broadcaster: default_authority\nAverage rate: 19.851\nBuffer length: 1.612\nMost recent transform: 1121.068\nOldest transform: 1119.456\n"];
+"base_link" -> "caster_front_left_link"[label=" Broadcaster: default_authority\nAverage rate: 19.851\nBuffer length: 1.612\nMost recent transform: 1121.068\nOldest transform: 1119.456\n"];
+"base_link" -> "caster_front_right_link"[label=" Broadcaster: default_authority\nAverage rate: 19.851\nBuffer length: 1.612\nMost recent transform: 1121.068\nOldest transform: 1119.456\n"];
+"base_link" -> "drivewhl_l_link"[label=" Broadcaster: default_authority\nAverage rate: 19.851\nBuffer length: 1.612\nMost recent transform: 1121.068\nOldest transform: 1119.456\n"];
+"base_link" -> "drivewhl_r_link"[label=" Broadcaster: default_authority\nAverage rate: 19.851\nBuffer length: 1.612\nMost recent transform: 1121.068\nOldest transform: 1119.456\n"];
+"base_link" -> "base_footprint"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "rplidar_c1"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "zed_camera_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"zed_camera_link" -> "zed_left_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"zed_camera_link" -> "zed_right_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"zed_camera_link" -> "zed_imu_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1770042565.4886928"[ shape=plaintext ] ;
+}->"map";
+}
