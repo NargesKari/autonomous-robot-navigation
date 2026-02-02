@@ -41,11 +41,24 @@ ament_target_dependencies(astar_node
   tf2_geometry_msgs
 )
 
-# PID Path Follower node
-add_executable(pid_path_follower_node scripts/pid_path_follower.cpp)
-ament_target_dependencies(pid_path_follower_node
+# PID Controller node
+add_executable(pid_controller_node scripts/pid_controller.cpp)
+ament_target_dependencies(pid_controller_node
   rclcpp nav_msgs geometry_msgs tf2_ros tf2_geometry_msgs
 )
+
+# MPC Controller node
+add_executable(mpc_controller_node scripts/mpc_controller.cpp)
+ament_target_dependencies(mpc_controller_node
+  rclcpp
+  geometry_msgs
+  nav_msgs
+  tf2
+  tf2_ros
+  tf2_geometry_msgs  
+)
+target_link_libraries(mpc_controller_node Eigen3::Eigen)
+
 
 add_executable(frame_id_converter_node scripts/frame_id_converter.cpp)
 ament_target_dependencies(frame_id_converter_node
@@ -73,7 +86,8 @@ target_link_libraries(astar_node "${cpp_typesupport_target}")
 
 install(TARGETS
   astar_node
-  pid_path_follower_node
+  pid_controller_node
+  mpc_controller_node
   frame_id_converter_node
   ekf_diff_imu_node
   motor_command_node
