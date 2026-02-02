@@ -94,13 +94,6 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(PROGRAMS
-  scripts/evaluate_rl_agent.py
-  scripts/gym_gazebo_env.py
-  scripts/rl_agent.py
-  scripts/train_rl_agent.py
-  DESTINATION lib/${PROJECT_NAME}
-)
 
 install(
   DIRECTORY
