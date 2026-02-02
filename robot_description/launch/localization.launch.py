@@ -215,10 +215,10 @@ def generate_launch_description():
         ]
     )
 
-    astar_planner_node = Node(
+    astar_node = Node(
         package='robot_description',
-        executable='astar_planner_node',
-        name='astar_planner',
+        executable='astar_node',
+        name='astar',
         output='screen',
         parameters=[{'use_sim_time': True}]
     )
@@ -243,7 +243,7 @@ def generate_launch_description():
         
         pointcloud_to_laserscan_node, 
 
-        # astar_planner_node,
+        astar_node,
         # rtabmap_vo_node,
         # ekf_diff_imu_node,
         # frame_id_converter_node,

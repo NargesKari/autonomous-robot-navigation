@@ -1,5 +1,3 @@
-
-
 # 📌 Task 1: Localization and Map Handling
 
 ## 📖 Theory & Objective
@@ -22,7 +20,6 @@ A consistent Coordinate Transform (TF) tree is critical for navigation. Our syst
 * **Map to Odom:** This transform is published by **AMCL** to correct the "drift" in odometry.
 * **Odom to Base Link:** Published by the robot's odometry system (e.g., wheel encoders).
 
----
 
 ## ⚙️ Technical Implementation
 
@@ -42,7 +39,6 @@ The system parameters are defined in `amcl_config.yaml`. Key configurations incl
 | `scan_topic` | `/gz_lidar/scan` | Source of Lidar data from Gazebo bridge |
 | `odom_model_type` | `diff` | Kinematic model for differential drive |
 
----
 
 ## Execution Workflow
 
@@ -66,7 +62,7 @@ To validate the localization performance and observe the particle filter's behav
 2. **Convergence Test:** Controlled the robot using `teleop_twist_keyboard`.
 3. **Observation:** As the robot moved, the Lidar scans matched against the map features, causing the dispersed particle cloud to converge onto the robot's true pose in both Gazebo and RViz.
 
----
+
 
 ## 🛠️ Verification and Results
 The following video demonstrates:
@@ -75,7 +71,87 @@ The following video demonstrates:
 2. The robot's ability to recover from an incorrect initial pose estimate.
 3. Successful **Particle Cloud Convergence** after a few seconds of movement.
 ### 🎥 Demonstration Video
-![Localization Demo](media/demo1.mp4)
+![Localization Demo](media/demo1.gif)
+you can find the video in ![Localization Demo](media/demo1.mp4)
 
 
+---
+
+
+# 📌 Task 2: Global Path Planning Server (A*)
+
+## 📖 Theory & Objective
+
+### 🔍 A* Search Algorithm
+
+The goal of this task is to implement a global path planner that calculates the most efficient, collision-free route from the robot's current position to a designated goal. We utilized the **A* (A-star)** algorithm, which is an informed search strategy known for its optimality and efficiency.
+
+* **Heuristic Approach:** A* guides its search by minimizing the total cost function: .
+* **Cost to Reach ():** The actual cost from the starting node to the current node . In our grid, straight moves cost **1.0** and diagonal moves cost **1.414**.
+* **Heuristic Estimate ():** The estimated cost from node  to the goal. We implemented **Euclidean Distance** as an admissible heuristic, ensuring the shortest path is always found.
+* **Optimal Path:** The algorithm maintains an "Open List" (Priority Queue) to explore nodes with the lowest  first, ensuring efficiency even in complex environments.
+
+### 🛰️ Service-Based Architecture
+
+Unlike continuous processes, the planner operates as a **ROS 2 Service Server**. It remains idle until a request is received, providing a path response only when triggered. This architecture is ideal for global planning as it saves computational resources.
+
+
+## ⚙️ Technical Implementation
+
+### 🗺️ Grid-Based Mapping
+
+The occupancy grid map provided by `nav2_map_server` is interpreted as a 2D graph where each cell is a node:
+
+* **Cell Traversal:** Cells with a value of `0` (free) or `-1` (unknown) are considered traversable.
+* **Coordinate Mapping:** The node performs real-time conversion between world coordinates (meters) and grid indices (pixels) using the map's resolution and origin.
+
+### 🛠️ Configuration & Dependencies
+
+The planner is integrated into the system with the following specifications:
+
+| Component | Detail | Description |
+| --- | --- | --- |
+| **Service Name** | `/plan_path` | Custom service defined in `PlanPath.srv` |
+| **Input (Request)** | `PoseStamped` | The target destination in the `map` frame |
+| **Output (Response)** | `nav_msgs/Path` | A sequence of poses forming the global route |
+| **Pose Source** | `/amcl_pose` or **TF** | Uses AMCL data with a TF fallback for the start point |
+
+
+## 🚀 Execution Workflow
+
+### Launching the Planner
+
+The A* node is launched alongside the localization stack to ensure map and pose data are available:
+
+```bash
+ros2 launch robot_description localization.launch.py
+
+```
+
+### 🆕 Testing Methodology (Service Call)
+
+To validate the path planning without a full navigation executive, we perform a direct service call via terminal:
+
+* **Command:** `ros2 service call /plan_path robot_description/srv/PlanPath "{goal: {header: {frame_id: 'map'}, pose: {position: {x: 2.0, y: 5.0, z: 0.0}}}}"`
+* **Validation Strategy:** By providing coordinates separated by obstacles (walls), we verify the algorithm's ability to find a path that obeys the occupancy grid constraints and optimizes distance.
+
+### Demonstration Procedure
+
+1. **System Readiness:** Ensure the robot is localized using the **2D Pose Estimate** tool in RViz.
+2. **Goal Selection:** A destination is sent to the `/plan_path` service.
+3. **Visualization:** The computed path is immediately published to the `/global_path` topic and visualized in RViz as a continuous line.
+
+---
+
+## 🛠️ Verification and Results
+
+The demonstration confirms the following:
+
+1. **Algorithm Correctness:** The A* algorithm successfully finds the shortest path while avoiding black-listed (obstacle) cells.
+2. **Service Reliability:** The server handles requests and returns a valid `nav_msgs/Path` message.
+3. **Visualization:** Successful rendering of the global plan in RViz, showing clear obstacle avoidance.
+
+### 🖼️ Planned Path Result
+
+![A* Path](media/astar.png)
 ---
